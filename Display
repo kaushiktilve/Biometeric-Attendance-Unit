@@ -1,0 +1,354 @@
+#include <UTFT.h>
+#include <Wire.h>
+#include "RTClib.h"
+RTC_DS1307 rtc;
+UTFT myGLCD(QD220A,10,9,13,12,11); // SDI,CLK,CS,RST,RS    
+int LED=8;          
+extern uint8_t BigFont[];
+extern uint8_t SmallFont[];
+extern uint8_t SevenSegNumFont[];
+int incomingByte;                             
+int backPin=7;
+int selectPin2=6;
+int selectPin3=5;
+char daysOfTheWeek[7][12] = {"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"};
+
+int k0=A0;
+int k1=A1;
+int k2=A2;
+int k3=A3;
+int k4=2;
+
+void setup()
+{ 
+
+  pinMode(k0,INPUT);   
+  pinMode(k1,INPUT);   
+  pinMode(k2,INPUT);   
+  pinMode(k3,INPUT);
+  pinMode(k4,INPUT);
+
+  pinMode(LED,OUTPUT);   
+  digitalWrite(LED,HIGH); 
+  pinMode(backPin,INPUT);    
+  pinMode(selectPin2,INPUT);
+  pinMode(selectPin3,INPUT);
+  myGLCD.InitLCD();  
+  myGLCD.clrScr();   
+  myGLCD.setFont(BigFont);
+  myGLCD.setColor(VGA_AQUA);
+  myGLCD.print("RAJIV GANDHI", CENTER, 56);
+  myGLCD.print("INSTITUTE", CENTER, 72);
+  myGLCD.print("OF", CENTER, 88);
+  myGLCD.print("TECHNOLOGY", CENTER, 104);
+  delay(1000);
+  
+  myGLCD.setColor(VGA_BLACK);
+  myGLCD.fillRoundRect(10,56,210,120);  
+  myGLCD.setColor(VGA_AQUA);
+  myGLCD.print("HANDHELD", CENTER, 56);
+  myGLCD.print("BIOMETRIC", CENTER, 72);
+  myGLCD.print("ATTENDANCE", CENTER, 88);
+  myGLCD.print("SYSTEM", CENTER, 104);
+  delay(1000);
+
+  myGLCD.setColor(VGA_BLACK);
+  myGLCD.fillRoundRect(10,56,210,120);  
+  myGLCD.setColor(VGA_AQUA);
+  myGLCD.print("WELCOME", CENTER, 56);
+  myGLCD.print("PROF.", CENTER, 72);
+  myGLCD.print("K.G.SAWARKAR", CENTER, 88);
+  myGLCD.setFont(SmallFont);
+  myGLCD.print("INPUT YOUR FINGER", CENTER,149 );
+  myGLCD.print("TO CONTINUE", CENTER,161 );
+  myGLCD.setFont(BigFont);
+  
+  Serial.begin(57600);
+  Wire.begin();
+  rtc.begin();
+}
+
+void loop()
+{    
+
+if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== HIGH )
+   {
+    myGLCD.setColor(VGA_BLACK);
+    myGLCD.fillRect(10,22,210,170);       
+l2: myGLCD.setColor(VGA_AQUA);
+    myGLCD.fillRoundRect(6,94,213,130);
+    myGLCD.fillRoundRect(6,134,213,170);
+    myGLCD.drawRect(0,0,219,175);
+    myGLCD.drawLine(1,16,219,16);
+    myGLCD.setColor(VGA_BLACK);
+    myGLCD.setBackColor(VGA_AQUA);
+    myGLCD.setFont(BigFont); 
+    myGLCD.print("ATTENDANCE>", 38,104 );
+    myGLCD.print("     ABOUT>", 38,144 );
+    myGLCD.setColor(VGA_AQUA);
+    myGLCD.fillCircle(92,44,6);
+    myGLCD.fillCircle(92,64,6);   
+l1: DateTime now = rtc.now(); 
+    int x = now.hour();
+    int y = now.minute();
+    int z = now.second();
+    int a = now.day();
+    int b = now.month();
+    int c = now.year();
+    myGLCD.setBackColor(VGA_BLACK);
+    myGLCD.setFont(SevenSegNumFont);
+    myGLCD.printNumI(x, 16, 30, 2, '0');
+    myGLCD.printNumI(y, 106, 30, 2, '0');
+    myGLCD.setFont(SmallFont);
+    myGLCD.print(daysOfTheWeek[now.dayOfTheWeek()],6 , 3);
+    myGLCD.printNumI(a, 136, 3, 2, '0');
+    myGLCD.print(":", 152,3 );
+    myGLCD.printNumI(b, 160, 3, 2, '0');
+    myGLCD.print(":", 176,3 );
+    myGLCD.printNumI(c, 184, 3, 4, '0');
+    myGLCD.setFont(BigFont);
+    myGLCD.printNumI(z, 173, 30, 2, '0');   
+    
+        
+       if (digitalRead(backPin)== HIGH)
+       {  
+        myGLCD.setColor(VGA_BLACK);
+        myGLCD.fillRect(6,17,213,170); 
+        myGLCD.setColor(VGA_AQUA);
+        myGLCD.print("ABOUT:", CENTER,20 );      
+        myGLCD.setFont(SmallFont);
+        myGLCD.print("A TAILOR MADE ATTENDANCE", 21, 39 );
+        myGLCD.print("RECORDING UNIT FOR RGIT.", 6, 51 );
+        myGLCD.print("PROJECT INITIATIVE BY", 21, 64 );
+        myGLCD.print("KRISHNA VERMA AND KAUSHIK", 6, 77);
+        myGLCD.print("TILVE.", 6, 90 );
+        myGLCD.fillRoundRect(130,149,213,170);          
+        myGLCD.setColor(VGA_BLACK);
+        myGLCD.setBackColor(VGA_AQUA);
+        myGLCD.setFont(BigFont);
+        myGLCD.print("BACK>", 133,152 );               
+        while (digitalRead(backPin)== LOW)
+ l3:    myGLCD.setColor(VGA_BLACK);
+        myGLCD.fillRect(6,17,213,170); 
+        goto l2;      
+       }  
+        if (digitalRead(selectPin3)== HIGH)
+       {  
+        myGLCD.setColor(VGA_BLACK);
+        myGLCD.fillRect(6,17,213,170); 
+l4:     myGLCD.setColor(VGA_AQUA);
+        myGLCD.fillRoundRect(6,43,213,74);
+        myGLCD.fillRoundRect(6,78,213,109);
+        myGLCD.fillRoundRect(6,113,213,144);
+        myGLCD.fillRoundRect(130,149,213,170);   
+        myGLCD.setBackColor(VGA_BLACK); 
+        myGLCD.setFont(BigFont);   
+        myGLCD.print("EXTC", CENTER,22 );
+        myGLCD.setColor(VGA_BLACK);
+        myGLCD.setBackColor(VGA_AQUA);
+        myGLCD.print(":SE:", CENTER,50 );
+        myGLCD.print(":TE:", CENTER,85 );
+        myGLCD.print(":BE:", CENTER,120 );
+        myGLCD.print("<A", 6, 50 );
+        myGLCD.print("<A", 6, 85 );
+        myGLCD.print("<A", 6,120 );
+        myGLCD.print("B>", 182, 50 );
+        myGLCD.print("B>", 182, 85 );
+        myGLCD.print("B>", 182,120 );
+        myGLCD.setFont(BigFont);
+        myGLCD.print("BACK>", 133,152 );       
+        while (digitalRead(backPin)== LOW  && digitalRead(selectPin3)== LOW )
+        if (digitalRead(backPin)== HIGH) 
+           {
+            myGLCD.fillRect(6,17,213,170); 
+            goto l2;
+           }
+        if (digitalRead(selectPin3)== HIGH) 
+           {
+            myGLCD.setColor(VGA_AQUA);
+            myGLCD.fillRect(78,50,142,66);
+            myGLCD.fillRect(78,85,142,101); 
+            myGLCD.fillRect(78,120,142,136);  
+            myGLCD.setBackColor(VGA_BLACK);
+            myGLCD.print("SUBJECT", CENTER,22 );
+            myGLCD.setColor(VGA_BLACK);
+            myGLCD.setBackColor(VGA_AQUA);
+            myGLCD.print("<DC  " , 6,  50 );
+            myGLCD.print("<DTSP" , 6,  85 );
+            myGLCD.print("<CCTN" , 6,  120);
+            myGLCD.print("  TV>" , 134, 50 );
+            myGLCD.print("  OS>" , 134, 85 );
+            myGLCD.print("VLSI>" , 134, 120);           
+            while (digitalRead(backPin)== LOW  && digitalRead(selectPin3)== LOW  )
+                 if (digitalRead(backPin)== HIGH) 
+                    {
+                     goto l4;
+                     }
+                  if (digitalRead(selectPin3)== HIGH) 
+                    {
+                     myGLCD.fillRect(6,17,214,170);
+  l5:                myGLCD.setColor(VGA_AQUA);
+                     myGLCD.setBackColor(VGA_BLACK);
+                     myGLCD.print("INPUT FINGER", CENTER,22 );
+                     myGLCD.drawLine(16,39,204,39);
+                     myGLCD.setFont(SmallFont);
+                     myGLCD.print("PROF.K.G.SAWARKAR INPUT", CENTER,149 );
+                     myGLCD.print("YOUR FINGER TO GO BACK", CENTER,161 );
+                     myGLCD.setFont(BigFont);
+
+         
+                                                  if ( digitalRead (k0)== HIGH && digitalRead (k1)== LOW && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("AZHAR  651", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("MITTAL  652", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("SIDDHESH  653", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== LOW && digitalRead (k2)== HIGH && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("SHREYA  654", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== LOW && digitalRead (k2)== HIGH && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("KARAN  655", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== HIGH && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("YASHRAJ  656", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== HIGH && digitalRead (k2)== HIGH && digitalRead (k3)== LOW && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("PRANAY  657", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== LOW && digitalRead (k2)== LOW && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("SWAPNIL 658", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== LOW && digitalRead (k2)== LOW && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("VIKI  659", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("NIKITA  660", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("KAUSHIK  661", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== LOW && digitalRead (k2)== HIGH && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("SUJATA  662", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== LOW && digitalRead (k2)== HIGH && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("HEMANT  663", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== HIGH && digitalRead (k3)== HIGH && digitalRead (k4)== LOW )
+                         {
+                          myGLCD.print("DHAVAL  664", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== LOW && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== HIGH )
+                         {
+                          myGLCD.print("KRISHNA  666", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== HIGH && digitalRead (k1)== LOW && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== HIGH )
+                         {
+                          myGLCD.print("POONAM  667", CENTER,85 );
+                          delay(1000);
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,85,213,101);
+                          } 
+
+                                                   if ( digitalRead (k0)== LOW && digitalRead (k1)== HIGH && digitalRead (k2)== LOW && digitalRead (k3)== LOW && digitalRead (k4)== HIGH )
+                         {
+
+                          myGLCD.setColor(VGA_BLACK);
+                          myGLCD.fillRect(6,22,213,40);
+                          myGLCD.fillRect(6,149,213,170);
+                          goto l2;
+                          
+                          }                        
+
+                          
+                                    
+                        }
+                        goto l5;    
+                     }                                           
+            }        
+       
+goto l1;
+
+   }
+} 
+
+
+
+
