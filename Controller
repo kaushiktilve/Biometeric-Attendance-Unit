@@ -1,0 +1,463 @@
+#include "FPS_GT511C3.h"
+#include "SoftwareSerial.h"
+// Hardware setup - FPS connected to:
+//    digital pin 5(arduino rx, fps tx)
+//    digital pin 6(arduino tx - 560ohm resistor fps tx - 1000ohm resistor - ground)
+//    this brings the 5v tx line down to about 3.2v so we dont fry our fps
+FPS_GT511C3 fps(5, 6); 
+
+#include <SD.h>
+#include <SPI.h>
+int CS_pin = 10;
+
+int k0=A0;
+int k1=A1;
+int k2=A2;
+int k3=A3;
+int k4=2;
+//int k5=3;
+
+void setup()
+{
+
+  pinMode(k0,OUTPUT);   
+  pinMode(k1,OUTPUT);   
+  pinMode(k2,OUTPUT);   
+  pinMode(k3,OUTPUT);   
+  pinMode(k4,OUTPUT);   
+  //pinMode(k5,OUTPUT);   
+
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+  
+  Serial.begin(9600);
+  
+  delay(100);
+  fps.Open();
+  fps.SetLED(true);
+
+       pinMode(CS_pin, OUTPUT);
+     if (!SD.begin(CS_pin))
+     {     
+       return;
+      }
+}
+
+void loop()
+{
+
+  if (fps.IsPressFinger())
+      {
+       fps.CaptureFinger(false);
+       int id = fps.Identify1_N();    
+       if (id <200)
+        {
+         Serial.print("Verified ID:");
+         Serial.println(id);
+
+      switch (id) 
+      {
+      case 1:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("AZHAR.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 2:
+digitalWrite(k0,LOW);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("MITTAL.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 3:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("SIDDHESH.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 4:
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("SHREYA.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 5:
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("KARAN.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,HIGH);
+digitalWrite(k1,LOW);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 6:
+digitalWrite(k0,LOW);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("YASHRAJ.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 7:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("PRANAY.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 8:
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("SWAPNIL.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+        break;
+      case 9:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("VIKI.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 10:
+digitalWrite(k0,LOW);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("NIKITA.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 11:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("KAUSHIK.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 12:
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("SUJATA.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 13:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,LOW);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("HEMANT.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 14:
+digitalWrite(k0,LOW);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+    { 
+      
+      File logFile = SD.open("DHAVAL.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 15:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,HIGH);
+digitalWrite(k3,HIGH);
+digitalWrite(k4,LOW);
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 16:
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,HIGH);
+    { 
+      File logFile = SD.open("KRISHNA.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 17:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,HIGH);
+    { 
+      File logFile = SD.open("POONAM.csv", FILE_WRITE);
+      if (logFile)
+      {
+       logFile.println("1");      
+       logFile.close();
+       }
+    }
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 18:
+digitalWrite(k0,LOW);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,HIGH);
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      case 19:
+digitalWrite(k0,HIGH);
+digitalWrite(k1,HIGH);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,HIGH);
+delay(1000);
+digitalWrite(k0,LOW);
+digitalWrite(k1,LOW);
+digitalWrite(k2,LOW);
+digitalWrite(k3,LOW);
+digitalWrite(k4,LOW);
+        break;
+      default:
+         Serial.println("Finger not found");       
+         }
+        }
+      } 
+  else
+     {
+     Serial.println("Please press finger");
+     }
+     delay(100); 
+}
